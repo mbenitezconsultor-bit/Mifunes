@@ -1,2 +1,2 @@
-# Mifunes
+# MiFunes
 Apk Mi Funes
