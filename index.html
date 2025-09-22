@@ -14,6 +14,8 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
             min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
         }
         
         .demo-container {
@@ -89,333 +91,421 @@
             color: #6b7280;
             font-weight: 500;
         }
+        
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #4b6948 0%, #3C5A4B 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+        
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        .loading-logo img {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            object-fit: contain;
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: 'Varela Round', sans-serif;
+        }
+        
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: white;
+            animation: dotBounce 1.5s infinite ease-in-out;
+        }
+        
+        .dot:nth-child(1) { animation-delay: 0s; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes dotBounce {
+            0%, 80%, 100% { 
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% { 
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+        
+        .main-content {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        
+        .main-content.loaded {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="text-gray-800">
-
-    <div class="demo-container">
-        <!-- Header -->
-        <!--<header class="flex items-center justify-between mb-8">
-            <div class="flex items-center space-x-4">
-                <div class="gradient-bg w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold">
-				<!--<img src="logo.png" style="width: 300px; height: auto;"></img>
-				<img src="logo.png" style="width: 300px; height: auto;">
-				</div>
-                <h1 class="text-2xl font-bold text-[#4b6948] logo-font">Mi Ciudad, contectada</h1>
-            </div>
-            <button onclick="location.reload()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg transition">
-                Reiniciar
-            </button>
-        </header>-->
-		<header class="flex items-center justify-center space-x-6 mb-8">
-        <!-- Logo grande - 128px � 128px -->
-        <div class="gradient-bg w-20 h-20 md:w-32 md:h-32 rounded-full flex items-center justify-center shadow-lg p-[1px]">
-    <img src="logo.png" class="w-full h-full rounded-full" alt="Logo MiFunes">
-         </div>
-        
-        <h1 class="text-2xl text-[#4b6948]">Ciudad Conectada</h1>
-    </header>
-
-        <!-- Demo Navigation -->
-        <div class="flex flex-wrap gap-2 mb-8">
-            <button onclick="showDemoScreen('main')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-[#4b6948] text-white">Inicio</button>
-            <button onclick="showDemoScreen('reportes')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Reportes</button>
-            <button onclick="showDemoScreen('transporte')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Transporte</button>
-            <button onclick="showDemoScreen('farmacias')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Farmacias</button>
-            <button onclick="showDemoScreen('residuos')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Residuos</button>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">
+            <img src="logo.png" alt="MiFunes Logo">
         </div>
+        <div class="loading-text">MiFunes</div>
+        <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
 
-        <!-- Demo Screens -->
-        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 min-h-[500px]">
-            <!-- Main Screen -->
-            <div id="demo-main" class="demo-screen active">
-                <h2 class="text-3xl font-bold text-[#4b6948] mb-6 text-center">Funciones</h2>
-                <p class="text-gray-600 text-center mb-8">Selecciona una función para explorar la demo interactiva</p>
-                
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <div onclick="showDemoScreen('reportes')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
-                        <span class="text-4xl mb-2">🛠️</span>
-                        <h3 class="font-semibold text-[#3C5A4B]">Reportes</h3>
-                        <p class="text-xs text-gray-500">Informá un reclamo</p>
-                    </div>
-                    <div onclick="showDemoScreen('transporte')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
-                        <span class="text-4xl mb-2">🚌</span>
-                        <h3 class="font-semibold text-[#3C5A4B]">Transporte</h3>
-                        <p class="text-xs text-gray-500">Horarios y recorridos</p>
-                    </div>
-                    <div onclick="showDemoScreen('farmacias')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
-                        <span class="text-4xl mb-2 text-[#6b9468]">✚</span>
-                        <h3 class="font-semibold text-[#3C5A4B]">Farmacias</h3>
-                        <p class="text-xs text-gray-500">Consultá las farmacias</p>
-                    </div>
-                    <div onclick="showDemoScreen('residuos')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
-                        <span class="text-4xl mb-2">♻️</span>
-                        <h3 class="font-semibold text-[#3C5A4B]">Residuos</h3>
-                        <p class="text-xs text-gray-500">Horarios y zonas</p>
-                    </div>
-                    <div onclick="showDemoScreen('alertas')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
-                        <span class="text-4xl mb-2">📢</span>
-                        <h3 class="font-semibold text-[#3C5A4B]">Alertas</h3>
-                        <p class="text-xs text-gray-500">Avisos importantes</p>
-                    </div>
-                    <div onclick="showDemoScreen('tramites')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
-                        <span class="text-4xl mb-2">📝</span>
-                        <h3 class="font-semibold text-[#3C5A4B]">Trámites</h3>
-                        <p class="text-xs text-gray-500">Gestiones y formularios</p>
-                    </div>
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="demo-container">
+            <!-- Header -->
+            <header class="flex items-center justify-center space-x-6 mb-8">
+                <div class="gradient-bg w-20 h-20 md:w-32 md:h-32 rounded-full flex items-center justify-center shadow-lg p-[1px]">
+                    <img src="logo.png" class="w-full h-full rounded-full" alt="Logo MiFunes">
                 </div>
+                <h1 class="text-2xl text-[#4b6948]">Ciudad Conectada</h1>
+            </header>
+
+            <!-- Demo Navigation -->
+            <div class="flex flex-wrap gap-2 mb-8">
+                <button onclick="showDemoScreen('main')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-[#4b6948] text-white">Inicio</button>
+                <button onclick="showDemoScreen('reportes')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Reportes</button>
+                <button onclick="showDemoScreen('transporte')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Transporte</button>
+                <button onclick="showDemoScreen('farmacias')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Farmacias</button>
+                <button onclick="showDemoScreen('residuos')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Residuos</button>
             </div>
 
-            <!-- Reportes Screen -->
-            <div id="demo-reportes" class="demo-screen">
-                <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Reportar Incidencia</h2>
-                
-                <div class="grid md:grid-cols-2 gap-6 items-start">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">Informar un nuevo incidente</h3>
-                        <form id="report-form" class="space-y-4">
-                            <div>
-                                <label for="category" class="block text-sm font-medium text-gray-700">Categoría</label>
-                                <select id="category" name="category" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#6b9468] focus:border-[#6b9468] sm:text-sm rounded-md">
-                                    <option>Alumbrado Público</option>
-                                    <option>Baches en la calzada</option>
-                                    <option>Recolección de residuos</option>
-                                    <option>Fuga de agua</option>
-                                    <option>Otro</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="location" class="block text-sm font-medium text-gray-700">Ubicación</label>
-                                <input type="text" id="location" name="location" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#6b9468] focus:border-[#6b9468] sm:text-sm rounded-md" placeholder="Ej: Calle San Martín 123">
-                            </div>
-                            <div>
-                                <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
-                                <textarea id="description" name="description" rows="3" class="mt-1 shadow-sm focus:ring-[#6b9468] focus:border-[#6b9468] block w-full sm:text-sm border border-gray-300 rounded-md p-2" placeholder="Describa el problema..."></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Adjuntar foto (opcional)</label>
-                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                    <div class="space-y-1 text-center">
-                                        <div class="flex text-sm text-gray-600">
-                                            <label class="relative cursor-pointer bg-white rounded-md font-medium text-[#6b9468] hover:text-[#4b6948] focus-within:outline-none">
-                                                <span>Seleccionar archivo</span>
-                                                <input type="file" class="sr-only">
-                                            </label>
+            <!-- Demo Screens -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 min-h-[500px]">
+                <!-- Main Screen -->
+                <div id="demo-main" class="demo-screen active">
+                    <h2 class="text-3xl font-bold text-[#4b6948] mb-6 text-center">Funciones</h2>
+                    <p class="text-gray-600 text-center mb-8">Selecciona una función para explorar la demo interactiva</p>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div onclick="showDemoScreen('reportes')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <span class="text-4xl mb-2">🛠️</span>
+                            <h3 class="font-semibold text-[#3C5A4B]">Reportes</h3>
+                            <p class="text-xs text-gray-500">Informá un reclamo</p>
+                        </div>
+                        <div onclick="showDemoScreen('transporte')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <span class="text-4xl mb-2">🚌</span>
+                            <h3 class="font-semibold text-[#3C5A4B]">Transporte</h3>
+                            <p class="text-xs text-gray-500">Horarios y recorridos</p>
+                        </div>
+                        <div onclick="showDemoScreen('farmacias')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <span class="text-4xl mb-2 text-[#6b9468]">✚</span>
+                            <h3 class="font-semibold text-[#3C5A4B]">Farmacias</h3>
+                            <p class="text-xs text-gray-500">Consultá las farmacias</p>
+                        </div>
+                        <div onclick="showDemoScreen('residuos')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <span class="text-4xl mb-2">♻️</span>
+                            <h3 class="font-semibold text-[#3C5A4B]">Residuos</h3>
+                            <p class="text-xs text-gray-500">Horarios y zonas</p>
+                        </div>
+                        <div onclick="showDemoScreen('alertas')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <span class="text-4xl mb-2">📢</span>
+                            <h3 class="font-semibold text-[#3C5A4B]">Alertas</h3>
+                            <p class="text-xs text-gray-500">Avisos importantes</p>
+                        </div>
+                        <div onclick="showDemoScreen('tramites')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <span class="text-4xl mb-2">📝</span>
+                            <h3 class="font-semibold text-[#3C5A4B]">Trámites</h3>
+                            <p class="text-xs text-gray-500">Gestiones y formularios</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reportes Screen -->
+                <div id="demo-reportes" class="demo-screen">
+                    <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Reportar Incidencia</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 items-start">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Informar un nuevo incidente</h3>
+                            <form id="report-form" class="space-y-4">
+                                <div>
+                                    <label for="category" class="block text-sm font-medium text-gray-700">Categoría</label>
+                                    <select id="category" name="category" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#6b9468] focus:border-[#6b9468] sm:text-sm rounded-md">
+                                        <option>Alumbrado Público</option>
+                                        <option>Baches en la calzada</option>
+                                        <option>Recolección de residuos</option>
+                                        <option>Fuga de agua</option>
+                                        <option>Otro</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="location" class="block text-sm font-medium text-gray-700">Ubicación</label>
+                                    <input type="text" id="location" name="location" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#6b9468] focus:border-[#6b9468] sm:text-sm rounded-md" placeholder="Ej: Calle San Martín 123">
+                                </div>
+                                <div>
+                                    <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
+                                    <textarea id="description" name="description" rows="3" class="mt-1 shadow-sm focus:ring-[#6b9468] focus:border-[#6b9468] block w-full sm:text-sm border border-gray-300 rounded-md p-2" placeholder="Describa el problema..."></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Adjuntar foto (opcional)</label>
+                                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                        <div class="space-y-1 text-center">
+                                            <div class="flex text-sm text-gray-600">
+                                                <label class="relative cursor-pointer bg-white rounded-md font-medium text-[#6b9468] hover:text-[#4b6948] focus-within:outline-none">
+                                                    <span>Seleccionar archivo</span>
+                                                    <input type="file" class="sr-only">
+                                                </label>
+                                            </div>
+                                            <p class="text-xs text-gray-500">PNG, JPG hasta 5MB</p>
                                         </div>
-                                        <p class="text-xs text-gray-500">PNG, JPG hasta 5MB</p>
                                     </div>
                                 </div>
-                            </div>
-                            <button type="button" onclick="submitReport()" class="w-full bg-[#6b9468] hover:bg-[#4b6948] text-white font-bold py-2 px-4 rounded-md transition duration-300">Enviar Reporte</button>
-                        </form>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">Reportes Recientes en tu Zona</h3>
-                        <div class="chart-container w-full h-64 mx-auto mb-6">
-                            <canvas id="reportsChart"></canvas>
+                                <button type="button" onclick="submitReport()" class="w-full bg-[#6b9468] hover:bg-[#4b6948] text-white font-bold py-2 px-4 rounded-md transition duration-300">Enviar Reporte</button>
+                            </form>
                         </div>
-                        <div class="bg-gray-100 p-4 rounded-lg">
-                            <h4 class="font-medium text-[#3C5A4B] mb-2">Estado de tus reportes</h4>
-                            <div class="space-y-2">
-                                <div class="flex justify-between items-center text-sm">
-                                    <span>Bache en Av. San Martín - Reportado hace 2 días</span>
-                                    <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">En revisión</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm">
-                                    <span>Luz quemada en Plaza Central - Reportado hace 5 días</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Resuelto</span>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Reportes Recientes en tu Zona</h3>
+                            <div class="chart-container w-full h-64 mx-auto mb-6">
+                                <canvas id="reportsChart"></canvas>
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                <h4 class="font-medium text-[#3C5A4B] mb-2">Estado de tus reportes</h4>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span>Bache en Av. San Martín - Reportado hace 2 días</span>
+                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">En revisión</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span>Luz quemada en Plaza Central - Reportado hace 5 días</span>
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Resuelto</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Transporte Screen -->
-            <div id="demo-transporte" class="demo-screen">
-                <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Transporte Público</h2>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">Paradas Cercanas</h3>
-                        <div class="map-container mb-4">
+                <!-- Transporte Screen -->
+                <div id="demo-transporte" class="demo-screen">
+                    <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Transporte Público</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Paradas Cercanas</h3>
+                            <div class="map-container mb-4">
+                                <div class="text-center">
+                                    <div class="text-4xl mb-2">🗺️</div>
+                                    <p>Mapa interactivo de Funes</p>
+                                    <p class="text-sm mt-2">Mostrando paradas cercanas a tu ubicación</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                                <div class="animate-spin rounded-full h-8 w-8 border-4 border-t-[#4b6948] border-gray-200 mx-auto mb-3"></div>
+                                <p class="text-center text-gray-600">Buscando tu ubicación...</p>
+                            </div>
+                            
+                            <div class="bg-green-50 p-4 rounded-lg hidden" id="location-result">
+                                <h4 class="font-medium text-[#3C5A4B] mb-2">📍 Ubicación detectada</h4>
+                                <p class="text-sm">Mostrando paradas cercanas a <span class="font-medium">Av. San Martín 1234</span></p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Próximos Colectivos</h3>
+                            <div class="space-y-4">
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-bold">Línea 142</h4>
+                                            <p class="text-sm text-gray-600">Dirección: Centro → Barrio San José</p>
+                                        </div>
+                                        <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">8 min</span>
+                                    </div>
+                                    <div class="mt-2 flex items-center text-sm">
+                                        <span class="text-gray-500">Próxima parada: San Martín y Belgrano</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-bold">Línea 153</h4>
+                                            <p class="text-sm text-gray-600">Dirección: Barrio San José → Centro</p>
+                                        </div>
+                                        <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">15 min</span>
+                                    </div>
+                                    <div class="mt-2 flex items-center text-sm">
+                                        <span class="text-gray-500">Próxima parada: Av. Circunvalación</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-bold">Línea 142 R</h4>
+                                            <p class="text-sm text-gray-600">Dirección: Centro → Barrio San Juan</p>
+                                        </div>
+                                        <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">22 min</span>
+                                    </div>
+                                    <div class="mt-2 flex items-center text-sm">
+                                        <span class="text-gray-500">Próxima parada: Estación de Servicio</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Farmacias Screen -->
+                <div id="demo-farmacias" class="demo-screen">
+                    <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Farmacias de Turno</h2>
+                    
+                    <div class="mb-6">
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+                            <p class="text-blue-700"><span class="font-bold">Nota:</span> Esta información se actualiza automáticamente según el turno establecido por el Colegio de Farmacéuticos.</p>
+                        </div>
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">Hoy <span id="current-date" class="text-gray-600"></span></h3>
+                            <button class="bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded text-sm">Ver turnos de la semana</button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
+                            <div class="flex items-start justify-between mb-3">
+                                <h4 class="font-bold text-lg">Farmacia San José</h4>
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Abierta ahora</span>
+                            </div>
+                            <p class="text-gray-600 mb-2">Av. San Martín 1234</p>
+                            <p class="text-gray-600 mb-4">Tel: 341-1234567</p>
+                            
+                            <div class="flex items-center text-sm text-gray-500 mb-2">
+                                <span class="w-20">Horario:</span>
+                                <span>08:00 - 20:00 hs</span>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button class="w-full bg-[#6b9468] hover:bg-[#4b6948] text-white font-bold py-2 px-4 rounded-md transition duration-300">
+                                    Llamar por teléfono
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
+                            <div class="flex items-start justify-between mb-3">
+                                <h4 class="font-bold text-lg">Farmacia Central</h4>
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Abierta ahora</span>
+                            </div>
+                            <p class="text-gray-600 mb-2">Belgrano 567</p>
+                            <p class="text-gray-600 mb-4">Tel: 341-7654321</p>
+                            
+                            <div class="flex items-center text-sm text-gray-500 mb-2">
+                                <span class="w-20">Horario:</span>
+                                <span>08:00 - 22:00 hs</span>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button class="w-full bg-[#6b9468] hover:bg-[#4b6948] text-white font-bold py-2 px-4 rounded-md transition duration-300">
+                                    Llamar por teléfono
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h3 class="text-lg font-semibold mb-3">Farmacias Cercanas</h3>
+                        <div class="map-container">
                             <div class="text-center">
-                                <div class="text-4xl mb-2">🗺️</div>
-                                <p>Mapa interactivo de Funes</p>
-                                <p class="text-sm mt-2">Mostrando paradas cercanas a tu ubicación</p>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-100 p-4 rounded-lg mb-4">
-                            <div class="animate-spin rounded-full h-8 w-8 border-4 border-t-[#4b6948] border-gray-200 mx-auto mb-3"></div>
-                            <p class="text-center text-gray-600">Buscando tu ubicación...</p>
-                        </div>
-                        
-                        <div class="bg-green-50 p-4 rounded-lg hidden" id="location-result">
-                            <h4 class="font-medium text-[#3C5A4B] mb-2">📍 Ubicación detectada</h4>
-                            <p class="text-sm">Mostrando paradas cercanas a <span class="font-medium">Av. San Martín 1234</span></p>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">Próximos Colectivos</h3>
-                        <div class="space-y-4">
-                            <div class="border border-gray-200 rounded-lg p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h4 class="font-bold">Línea 142</h4>
-                                        <p class="text-sm text-gray-600">Dirección: Centro → Barrio San José</p>
-                                    </div>
-                                    <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">8 min</span>
-                                </div>
-                                <div class="mt-2 flex items-center text-sm">
-                                    <span class="text-gray-500">Próxima parada: San Martín y Belgrano</span>
-                                </div>
-                            </div>
-                            
-                            <div class="border border-gray-200 rounded-lg p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h4 class="font-bold">Línea 153</h4>
-                                        <p class="text-sm text-gray-600">Dirección: Barrio San José → Centro</p>
-                                    </div>
-                                    <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">15 min</span>
-                                </div>
-                                <div class="mt-2 flex items-center text-sm">
-                                    <span class="text-gray-500">Próxima parada: Av. Circunvalación</span>
-                                </div>
-                            </div>
-                            
-                            <div class="border border-gray-200 rounded-lg p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h4 class="font-bold">Línea 142 R</h4>
-                                        <p class="text-sm text-gray-600">Dirección: Centro → Barrio San Juan</p>
-                                    </div>
-                                    <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">22 min</span>
-                                </div>
-                                <div class="mt-2 flex items-center text-sm">
-                                    <span class="text-gray-500">Próxima parada: Estación de Servicio</span>
-                                </div>
+                                <div class="text-4xl mb-2">📍</div>
+                                <p>Mapa de farmacias en Funes</p>
+                                <p class="text-sm mt-2">Mostrando todas las farmacias disponibles</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Farmacias Screen -->
-            <div id="demo-farmacias" class="demo-screen">
-                <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Farmacias de Turno</h2>
-                
-                <div class="mb-6">
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-                        <p class="text-blue-700"><span class="font-bold">Nota:</span> Esta información se actualiza automáticamente según el turno establecido por el Colegio de Farmacéuticos.</p>
-                    </div>
+                <!-- Residuos Screen -->
+                <div id="demo-residuos" class="demo-screen">
+                    <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Recolección de Residuos</h2>
                     
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold">Hoy <span id="current-date" class="text-gray-600"></span></h3>
-                        <button class="bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded text-sm">Ver turnos de la semana</button>
-                    </div>
-                </div>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
-                        <div class="flex items-start justify-between mb-3">
-                            <h4 class="font-bold text-lg">Farmacia San José</h4>
-                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Abierta ahora</span>
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Horarios de Recolección</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex items-center justify-between py-2 border-b border-gray-200">
+                                    <span class="font-medium">Lunes, Miércoles, Viernes</span>
+                                    <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">21:00 hs</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-b border-gray-200">
+                                    <span class="font-medium">Martes y Jueves</span>
+                                    <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">08:00 hs</span>
+                                </div>
+                                <div class="flex items-center justify-between py-2">
+                                    <span class="font-medium">Sábados</span>
+                                    <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">09:00 hs</span>
+                                </div>
+                            </div>
                         </div>
-                        <p class="text-gray-600 mb-2">Av. San Martín 1234</p>
-                        <p class="text-gray-600 mb-4">Tel: 341-1234567</p>
                         
-                        <div class="flex items-center text-sm text-gray-500 mb-2">
-                            <span class="w-20">Horario:</span>
-                            <span>08:00 - 20:00 hs</span>
-                        </div>
-                        
-                        <div class="mt-4">
-                            <button class="w-full bg-[#6b9468] hover:bg-[#4b6948] text-white font-bold py-2 px-4 rounded-md transition duration-300">
-                                Llamar por teléfono
-                            </button>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Próxima Recolección</h3>
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-5 text-center">
+                                <div class="text-4xl text-[#4b6948] mb-2">🗓️</div>
+                                <p class="font-bold text-lg">Mañana a las 21:00 hs</p>
+                                <p class="text-gray-600">No olvides sacar los residuos después de las 20:00 hs</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
-                        <div class="flex items-start justify-between mb-3">
-                            <h4 class="font-bold text-lg">Farmacia Central</h4>
-                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Abierta ahora</span>
-                        </div>
-                        <p class="text-gray-600 mb-2">Belgrano 567</p>
-                        <p class="text-gray-600 mb-4">Tel: 341-7654321</p>
-                        
-                        <div class="flex items-center text-sm text-gray-500 mb-2">
-                            <span class="w-20">Horario:</span>
-                            <span>08:00 - 22:00 hs</span>
-                        </div>
-                        
-                        <div class="mt-4">
-                            <button class="w-full bg-[#6b9468] hover:bg-[#4b6948] text-white font-bold py-2 px-4 rounded-md transition duration-300">
-                                Llamar por teléfono
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-6">
-                    <h3 class="text-lg font-semibold mb-3">Farmacias Cercanas</h3>
-                    <div class="map-container">
+                    <h3 class="text-lg font-semibold mb-3">Zonas de Recolección</h3>
+                    <div class="map-container mb-6">
                         <div class="text-center">
-                            <div class="text-4xl mb-2">📍</div>
-                            <p>Mapa de farmacias en Funes</p>
-                            <p class="text-sm mt-2">Mostrando todas las farmacias disponibles</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Residuos Screen -->
-            <div id="demo-residuos" class="demo-screen">
-                <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Recolección de Residuos</h2>
-                
-                <div class="grid md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">Horarios de Recolección</h3>
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <div class="flex items-center justify-between py-2 border-b border-gray-200">
-                                <span class="font-medium">Lunes, Miércoles, Viernes</span>
-                                <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">21:00 hs</span>
-                            </div>
-                            <div class="flex items-center justify-between py-2 border-b border-gray-200">
-                                <span class="font-medium">Martes y Jueves</span>
-                                <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">08:00 hs</span>
-                            </div>
-                            <div class="flex items-center justify-between py-2">
-                                <span class="font-medium">Sábados</span>
-                                <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">09:00 hs</span>
-                            </div>
+                            <div class="text-4xl mb-2">🗺️</div>
+                            <p>Mapa de zonas de recolección</p>
+                            <p class="text-sm mt-2">Zona actual: <span class="font-medium">Área Central</span></p>
                         </div>
                     </div>
                     
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">Próxima Recolección</h3>
-                        <div class="bg-green-50 border border-green-200 rounded-lg p-5 text-center">
-                            <div class="text-4xl text-[#4b6948] mb-2">🗓️</div>
-                            <p class="font-bold text-lg">Mañana a las 21:00 hs</p>
-                            <p class="text-gray-600">No olvides sacar los residuos después de las 20:00 hs</p>
-                        </div>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <p class="text-blue-700"><span class="font-bold">Recordatorio:</span> Los residuos de poda y escombros se retiran los días lunes. Separar los residuos reciclables ayuda al medio ambiente.</p>
                     </div>
-                </div>
-                
-                <h3 class="text-lg font-semibold mb-3">Zonas de Recolección</h3>
-                <div class="map-container mb-6">
-                    <div class="text-center">
-                        <div class="text-4xl mb-2">🗺️</div>
-                        <p>Mapa de zonas de recolección</p>
-                        <p class="text-sm mt-2">Zona actual: <span class="font-medium">Área Central</span></p>
-                    </div>
-                </div>
-                
-                <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
-                    <p class="text-blue-700"><span class="font-bold">Recordatorio:</span> Los residuos de poda y escombros se retiran los días lunes. Separar los residuos reciclables ayuda al medio ambiente.</p>
                 </div>
             </div>
         </div>
@@ -427,6 +517,30 @@
     </div>
 
     <script>
+        // Loading Screen Management
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Show loading for 2 seconds
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.visibility = 'hidden';
+                
+                mainContent.classList.add('loaded');
+                
+                // Initialize app after loading
+                initializeApp();
+            }, 2000);
+        });
+        
+        // Initialize app functions
+        function initializeApp() {
+            renderReportsChart();
+            simulateGeolocation();
+            setCurrentDate();
+        }
+
         // Demo navigation
         function showDemoScreen(screenId) {
             // Hide all screens
@@ -550,13 +664,6 @@
                 notification.classList.remove('show');
             }, 3000);
         }
-        
-        // Initialize demo
-        document.addEventListener('DOMContentLoaded', function() {
-            renderReportsChart();
-            simulateGeolocation();
-            setCurrentDate();
-        });
     </script>
 
 </body>
