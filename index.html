@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Interactiva - MiFunes</title>
+    <title>MiFunes</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -95,15 +95,26 @@
 
     <div class="demo-container">
         <!-- Header -->
-        <header class="flex items-center justify-between mb-8">
+        <!--<header class="flex items-center justify-between mb-8">
             <div class="flex items-center space-x-4">
-                <div class="gradient-bg w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold">MF</div>
-                <h1 class="text-2xl font-bold text-[#4b6948] logo-font">Demo Interactiva - MiFunes</h1>
+                <div class="gradient-bg w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold">
+				<!--<img src="logo.png" style="width: 300px; height: auto;"></img>
+				<img src="logo.png" style="width: 300px; height: auto;">
+				</div>
+                <h1 class="text-2xl font-bold text-[#4b6948] logo-font">Mi Ciudad, contectada</h1>
             </div>
             <button onclick="location.reload()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg transition">
-                Reiniciar Demo
+                Reiniciar
             </button>
-        </header>
+        </header>-->
+		<header class="flex items-center justify-center space-x-6 mb-8">
+        <!-- Logo grande - 128px ◊ 128px -->
+        <div class="gradient-bg w-24 h-24 md:w-32 md:h-32 rounded-full flex items-center justify-center shadow-lg p-[1px]">
+    <img src="logo.png" class="w-full h-full rounded-full" alt="Logo MiFunes">
+         </div>
+        
+        <h1 class="text-4xl font-bold text-[#4b6948]">Ciudad conectada</h1>
+    </header>
 
         <!-- Demo Navigation -->
         <div class="flex flex-wrap gap-2 mb-8">
@@ -118,7 +129,7 @@
         <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 min-h-[500px]">
             <!-- Main Screen -->
             <div id="demo-main" class="demo-screen active">
-                <h2 class="text-3xl font-bold text-[#4b6948] mb-6 text-center">Funcionalidades de MiFunes</h2>
+                <h2 class="text-3xl font-bold text-[#4b6948] mb-6 text-center">Funciones</h2>
                 <p class="text-gray-600 text-center mb-8">Selecciona una funci√≥n para explorar la demo interactiva</p>
                 
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
