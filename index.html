@@ -21,7 +21,7 @@
         .demo-container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 0 2rem 2rem 2rem;
         }
         
         .logo-font {
@@ -178,6 +178,131 @@
         .main-content.loaded {
             opacity: 1;
         }
+        
+        /* Nuevo header con fondo verde */
+        .app-header {
+            background: linear-gradient(135deg, #4b6948 0%, #3C5A4B 100%);
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            border-radius: 0 0 24px 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .header-logo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Efecto de pulso sutil para indicar que es interactivo */
+        .header-logo::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            animation: pulse-glow 3s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+        
+        .header-logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+        }
+        
+        .header-logo:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header-logo img {
+            width: 85%;
+            height: 85%;
+            border-radius: 50%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .header-logo:hover img {
+            transform: scale(1.05);
+        }
+        
+        .header-title {
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+            font-family: 'Varela Round', sans-serif;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+        
+        .header-title:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Indicador visual de que es un botón de home */
+        .home-indicator {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .header-content:hover .home-indicator {
+            opacity: 1;
+        }
+        
+        .home-indicator::before {
+            content: "←";
+            margin-right: 5px;
+            font-size: 1.2rem;
+        }
+        
+        .home-indicator::after {
+            content: "→";
+            margin-left: 5px;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body class="text-gray-800">
@@ -196,37 +321,28 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <div class="demo-container">
-            <!-- Header -->
-            <header class="flex items-center justify-center space-x-6 mb-8">
-                <div class="gradient-bg w-20 h-20 md:w-32 md:h-32 rounded-full flex items-center justify-center shadow-lg p-[1px]">
-                    <img src="logo.png" class="w-full h-full rounded-full" alt="Logo MiFunes">
+        <!-- Nuevo Header con fondo verde -->
+        <div class="app-header">
+            <div class="header-content">
+                <div class="header-logo" onclick="showDemoScreen('main')" title="Volver al inicio">
+                    <img src="logo.png" alt="Logo MiFunes">
                 </div>
-                <h1 class="text-2xl text-[#4b6948]">Ciudad Conectada</h1>
-            </header>
-
-            <!-- Demo Navigation -->
-            <div class="flex flex-wrap gap-2 mb-8">
-                <button onclick="showDemoScreen('main')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-[#4b6948] text-white">Inicio</button>
-                <button onclick="showDemoScreen('reportes')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Reportes</button>
-                <button onclick="showDemoScreen('transporte')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Transporte</button>
-                <button onclick="showDemoScreen('farmacias')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Farmacias</button>
-                <button onclick="showDemoScreen('residuos')" class="demo-nav-btn px-4 py-2 rounded-lg transition-all bg-gray-200 hover:bg-gray-300">Residuos</button>
+                <h1 class="header-title" onclick="showDemoScreen('main')" title="Volver al inicio">Ciudad Conectada</h1>
+                <div class="home-indicator">Haz clic para volver al inicio</div>
             </div>
+        </div>
 
+        <div class="demo-container">
             <!-- Demo Screens -->
             <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 min-h-[500px]">
                 <!-- Main Screen -->
                 <div id="demo-main" class="demo-screen active">
-                    <h2 class="text-3xl font-bold text-[#4b6948] mb-6 text-center">Funciones</h2>
-                    <p class="text-gray-600 text-center mb-8">Selecciona una función para explorar la demo interactiva</p>
-                    
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <div onclick="showDemoScreen('reportes')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
-                            <span class="text-4xl mb-2">🛠️</span>
-                            <h3 class="font-semibold text-[#3C5A4B]">Reportes</h3>
-                            <p class="text-xs text-gray-500">Informá un reclamo</p>
-                        </div>
+                        <div onclick="showDemoScreen('alertas')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <span class="text-4xl mb-2">📢</span>
+                            <h3 class="font-semibold text-[#3C5A4B]">Alertas</h3>
+                            <p class="text-xs text-gray-500">Avisos importantes</p>
+                        </div>  
                         <div onclick="showDemoScreen('transporte')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
                             <span class="text-4xl mb-2">🚌</span>
                             <h3 class="font-semibold text-[#3C5A4B]">Transporte</h3>
@@ -242,10 +358,10 @@
                             <h3 class="font-semibold text-[#3C5A4B]">Residuos</h3>
                             <p class="text-xs text-gray-500">Horarios y zonas</p>
                         </div>
-                        <div onclick="showDemoScreen('alertas')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
-                            <span class="text-4xl mb-2">📢</span>
-                            <h3 class="font-semibold text-[#3C5A4B]">Alertas</h3>
-                            <p class="text-xs text-gray-500">Avisos importantes</p>
+                        <div onclick="showDemoScreen('reportes')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <span class="text-4xl mb-2">🛠️</span>
+                            <h3 class="font-semibold text-[#3C5A4B]">Reportes</h3>
+                            <p class="text-xs text-gray-500">Informá un reclamo</p>
                         </div>
                         <div onclick="showDemoScreen('tramites')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
                             <span class="text-4xl mb-2">📝</span>
@@ -255,6 +371,7 @@
                     </div>
                 </div>
 
+                <!-- Resto de las pantallas (sin cambios) -->
                 <!-- Reportes Screen -->
                 <div id="demo-reportes" class="demo-screen">
                     <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Reportar Incidencia</h2>
@@ -550,24 +667,6 @@
             
             // Show selected screen
             document.getElementById(`demo-${screenId}`).classList.add('active');
-            
-            // Update navigation buttons
-            document.querySelectorAll('.demo-nav-btn').forEach(btn => {
-                btn.classList.remove('bg-[#4b6948]', 'text-white');
-            });
-            
-            // Highlight current button
-            if (screenId === 'main') {
-                document.querySelectorAll('.demo-nav-btn')[0].classList.add('bg-[#4b6948]', 'text-white');
-            } else {
-                const buttons = document.querySelectorAll('.demo-nav-btn');
-                for (let i = 0; i < buttons.length; i++) {
-                    if (buttons[i].textContent.toLowerCase().includes(screenId)) {
-                        buttons[i].classList.add('bg-[#4b6948]', 'text-white');
-                        break;
-                    }
-                }
-            }
             
             // Initialize specific screens
             if (screenId === 'reportes') {
