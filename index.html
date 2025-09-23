@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MiFunes</title>
+    <title>MiFunes - Ciudad Conectada</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -29,24 +29,48 @@
         }
         
         .function-card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            transition: all 0.3s ease-in-out;
             border-radius: 12px;
-            overflow: hidden;
+            overflow: visible;
             cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
         }
         
         .function-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            border-color: #4b6948;
         }
         
-        .content-panel {
-            transition: all 0.5s ease-in-out;
-            border-radius: 12px;
+        .notification-badge {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            animation: pulse-badge 2s infinite;
+            z-index: 20;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes pulse-badge {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
         }
         
         .gradient-bg {
-            background: linear-gradient(135deg, #4b6948 0%, #3C5A4B 100%);
+            background: linear-gradient(135deg, #5a7a55 0%, #4a6a4a 100%);
         }
         
         .demo-screen {
@@ -92,14 +116,14 @@
             font-weight: 500;
         }
         
-        /* Loading Screen Styles */
+        /* Loading Screen */
         .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #4b6948 0%, #3C5A4B 100%);
+            background: linear-gradient(135deg, #5a7a55 0%, #4a6a4a 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -119,13 +143,6 @@
             margin-bottom: 2rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             animation: pulse 2s infinite;
-        }
-        
-        .loading-logo img {
-            width: 80%;
-            height: 80%;
-            border-radius: 50%;
-            object-fit: contain;
         }
         
         .loading-text {
@@ -160,14 +177,8 @@
         }
         
         @keyframes dotBounce {
-            0%, 80%, 100% { 
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-            40% { 
-                transform: scale(1.2);
-                opacity: 1;
-            }
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1.2); opacity: 1; }
         }
         
         .main-content {
@@ -179,13 +190,14 @@
             opacity: 1;
         }
         
-        /* Nuevo header con fondo verde */
+        /* Header mejorado */
         .app-header {
-            background: linear-gradient(135deg, #4b6948 0%, #3C5A4B 100%);
-            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #5a7a55 0%, #4a6a4a 100%);
+            padding: 3rem 2rem 4rem 2rem;
             margin-bottom: 2rem;
             border-radius: 0 0 24px 24px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         
         .header-content {
@@ -198,8 +210,8 @@
         }
         
         .header-logo {
-            width: 140px;
-            height: 140px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
             background: white;
             display: flex;
@@ -208,43 +220,40 @@
             margin-bottom: 1.5rem;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
+            border: 4px solid transparent;
+            animation: logo-pulse 3s infinite;
         }
         
-        /* Efecto de pulso sutil para indicar que es interactivo */
-        .header-logo::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 50%;
-            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-            animation: pulse-glow 3s infinite;
-        }
-        
-        @keyframes pulse-glow {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+        @keyframes logo-pulse {
+            0% { 
+                transform: scale(1);
+                border-color: transparent;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             }
-            70% {
-                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            50% { 
+                transform: scale(1.08);
+                border-color: rgba(255, 255, 255, 0.8);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 0 0 0 10px rgba(255, 255, 255, 0.15);
             }
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            100% { 
+                transform: scale(1);
+                border-color: transparent;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             }
         }
         
         .header-logo:hover {
-            transform: scale(1.05);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+            transform: scale(1.12);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 15px rgba(255, 255, 255, 0.2);
+            animation: none;
+            border-color: white;
         }
         
         .header-logo:active {
-            transform: scale(0.98);
+            transform: scale(0.95);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
@@ -257,12 +266,12 @@
         }
         
         .header-logo:hover img {
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
         
         .header-title {
             color: white;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 600;
             font-family: 'Varela Round', sans-serif;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -277,7 +286,6 @@
             transform: translateY(-2px);
         }
         
-        /* Indicador visual de que es un botón de home */
         .home-indicator {
             display: flex;
             align-items: center;
@@ -303,6 +311,75 @@
             margin-left: 5px;
             font-size: 1.2rem;
         }
+        
+        /* Información de hora y clima */
+        .header-info {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            max-width: 1000px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+        
+        .time-info {
+            color: white;
+            text-align: right;
+        }
+        
+        .time-display {
+            font-size: 1.8rem;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .date-display {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .weather-info {
+            color: white;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .weather-icon {
+            font-size: 2rem;
+        }
+        
+        .weather-temp {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .weather-location {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Urbanito de Funes */
+        .urbanito-container {
+            background: linear-gradient(135deg, #4b6948, #3C5A4B);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            margin-top: 1rem;
+        }
+
+        .urbanito-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
     </style>
 </head>
 <body class="text-gray-800">
@@ -321,7 +398,7 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <!-- Nuevo Header con fondo verde -->
+        <!-- Header -->
         <div class="app-header">
             <div class="header-content">
                 <div class="header-logo" onclick="showDemoScreen('main')" title="Volver al inicio">
@@ -329,6 +406,21 @@
                 </div>
                 <h1 class="header-title" onclick="showDemoScreen('main')" title="Volver al inicio">Ciudad Conectada</h1>
                 <div class="home-indicator">Haz clic para volver al inicio</div>
+            </div>
+            
+            <!-- Información de hora y clima -->
+            <div class="header-info">
+                <div class="weather-info">
+                    <div class="weather-icon">🌤️</div>
+                    <div class="weather-details">
+                        <div class="weather-temp" id="current-temp">--°C</div>
+                        <div class="weather-location" id="current-location">Funes, Santa Fe</div>
+                    </div>
+                </div>
+                <div class="time-info">
+                    <div class="time-display" id="current-time">00:00:00</div>
+                    <div class="date-display" id="current-date-full">Cargando...</div>
+                </div>
             </div>
         </div>
 
@@ -342,6 +434,7 @@
                             <span class="text-4xl mb-2">📢</span>
                             <h3 class="font-semibold text-[#3C5A4B]">Alertas</h3>
                             <p class="text-xs text-gray-500">Avisos importantes</p>
+                            <div class="notification-badge">3</div>
                         </div>  
                         <div onclick="showDemoScreen('transporte')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
                             <span class="text-4xl mb-2">🚌</span>
@@ -368,71 +461,40 @@
                             <h3 class="font-semibold text-[#3C5A4B]">Trámites</h3>
                             <p class="text-xs text-gray-500">Gestiones y formularios</p>
                         </div>
+                        <div onclick="showDemoScreen('eventos')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <span class="text-4xl mb-2">🗓️</span>
+                            <h3 class="font-semibold text-[#3C5A4B]">Calendario Eventos</h3>
+                            <p class="text-xs text-gray-500">Eventos y actividades</p>
+                        </div>
+                        <div onclick="showDemoScreen('solidaridad')" class="function-card bg-white p-4 rounded-lg shadow-md border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <span class="text-4xl mb-2">❤️</span>
+                            <h3 class="font-semibold text-[#3C5A4B]">Solidaridad</h3>
+                            <p class="text-xs text-gray-500">Comunidad y ayuda</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Resto de las pantallas (sin cambios) -->
-                <!-- Reportes Screen -->
-                <div id="demo-reportes" class="demo-screen">
-                    <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Reportar Incidencia</h2>
+                <!-- Alertas Screen -->
+                <div id="demo-alertas" class="demo-screen">
+                    <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Alertas y Avisos Importantes</h2>
                     
-                    <div class="grid md:grid-cols-2 gap-6 items-start">
-                        <div>
-                            <h3 class="text-lg font-semibold mb-3">Informar un nuevo incidente</h3>
-                            <form id="report-form" class="space-y-4">
-                                <div>
-                                    <label for="category" class="block text-sm font-medium text-gray-700">Categoría</label>
-                                    <select id="category" name="category" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#6b9468] focus:border-[#6b9468] sm:text-sm rounded-md">
-                                        <option>Alumbrado Público</option>
-                                        <option>Baches en la calzada</option>
-                                        <option>Recolección de residuos</option>
-                                        <option>Fuga de agua</option>
-                                        <option>Otro</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="location" class="block text-sm font-medium text-gray-700">Ubicación</label>
-                                    <input type="text" id="location" name="location" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#6b9468] focus:border-[#6b9468] sm:text-sm rounded-md" placeholder="Ej: Calle San Martín 123">
-                                </div>
-                                <div>
-                                    <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
-                                    <textarea id="description" name="description" rows="3" class="mt-1 shadow-sm focus:ring-[#6b9468] focus:border-[#6b9468] block w-full sm:text-sm border border-gray-300 rounded-md p-2" placeholder="Describa el problema..."></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Adjuntar foto (opcional)</label>
-                                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                        <div class="space-y-1 text-center">
-                                            <div class="flex text-sm text-gray-600">
-                                                <label class="relative cursor-pointer bg-white rounded-md font-medium text-[#6b9468] hover:text-[#4b6948] focus-within:outline-none">
-                                                    <span>Seleccionar archivo</span>
-                                                    <input type="file" class="sr-only">
-                                                </label>
-                                            </div>
-                                            <p class="text-xs text-gray-500">PNG, JPG hasta 5MB</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="button" onclick="submitReport()" class="w-full bg-[#6b9468] hover:bg-[#4b6948] text-white font-bold py-2 px-4 rounded-md transition duration-300">Enviar Reporte</button>
-                            </form>
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-red-500 bg-red-50 p-4 rounded">
+                            <h3 class="font-semibold text-red-700">🚨 Corte programado de agua</h3>
+                            <p class="text-sm text-red-600 mt-1">Mañana de 8:00 a 12:00 hs en zona centro por trabajos de mantenimiento.</p>
+                            <span class="text-xs text-red-500">Publicado hoy a las 09:30</span>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-semibold mb-3">Reportes Recientes en tu Zona</h3>
-                            <div class="chart-container w-full h-64 mx-auto mb-6">
-                                <canvas id="reportsChart"></canvas>
-                            </div>
-                            <div class="bg-gray-100 p-4 rounded-lg">
-                                <h4 class="font-medium text-[#3C5A4B] mb-2">Estado de tus reportes</h4>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between items-center text-sm">
-                                        <span>Bache en Av. San Martín - Reportado hace 2 días</span>
-                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">En revisión</span>
-                                    </div>
-                                    <div class="flex justify-between items-center text-sm">
-                                        <span>Luz quemada en Plaza Central - Reportado hace 5 días</span>
-                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Resuelto</span>
-                                    </div>
-                                </div>
-                            </div>
+                        
+                        <div class="border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded">
+                            <h3 class="font-semibold text-yellow-700">⚠️ Limpieza de arroyos</h3>
+                            <p class="text-sm text-yellow-600 mt-1">Trabajos de limpieza en arroyo Funes. Evitar acercarse a la zona.</p>
+                            <span class="text-xs text-yellow-500">Publicado ayer a las 15:45</span>
+                        </div>
+                        
+                        <div class="border-l-4 border-blue-500 bg-blue-50 p-4 rounded">
+                            <h3 class="font-semibold text-blue-700">ℹ️ Nuevo punto de reciclaje</h3>
+                            <p class="text-sm text-blue-600 mt-1">Se instaló nuevo contenedor de reciclaje en Plaza San Martín.</p>
+                            <span class="text-xs text-blue-500">Publicado hace 2 días</span>
                         </div>
                     </div>
                 </div>
@@ -460,6 +522,23 @@
                             <div class="bg-green-50 p-4 rounded-lg hidden" id="location-result">
                                 <h4 class="font-medium text-[#3C5A4B] mb-2">📍 Ubicación detectada</h4>
                                 <p class="text-sm">Mostrando paradas cercanas a <span class="font-medium">Av. San Martín 1234</span></p>
+                            </div>
+
+                            <!-- Urbanito de Funes -->
+                            <div class="urbanito-container">
+                                <div class="urbanito-title">
+                                    <span>🚐</span>
+                                    <span>Urbanito de Funes</span>
+                                </div>
+                                <p class="text-sm opacity-90">Servicio de transporte local que conecta los barrios</p>
+                                <div class="mt-3 grid grid-cols-2 gap-2">
+                                    <button onclick="showUrbanitoRoute()" class="bg-white text-[#4b6948] py-2 px-3 rounded text-sm font-medium hover:bg-opacity-90 transition">
+                                        Ver Recorrido
+                                    </button>
+                                    <button onclick="showUrbanitoSchedule()" class="bg-white text-[#4b6948] py-2 px-3 rounded text-sm font-medium hover:bg-opacity-90 transition">
+                                        Horarios
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
@@ -495,13 +574,13 @@
                                 <div class="border border-gray-200 rounded-lg p-4">
                                     <div class="flex justify-between items-start">
                                         <div>
-                                            <h4 class="font-bold">Línea 142 R</h4>
-                                            <p class="text-sm text-gray-600">Dirección: Centro → Barrio San Juan</p>
+                                            <h4 class="font-bold">Urbanito Funes</h4>
+                                            <p class="text-sm text-gray-600">Recorrido: Centro → Barrios</p>
                                         </div>
-                                        <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">22 min</span>
+                                        <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">5 min</span>
                                     </div>
                                     <div class="mt-2 flex items-center text-sm">
-                                        <span class="text-gray-500">Próxima parada: Estación de Servicio</span>
+                                        <span class="text-gray-500">Próxima parada: Municipalidad</span>
                                     </div>
                                 </div>
                             </div>
@@ -624,6 +703,218 @@
                         <p class="text-blue-700"><span class="font-bold">Recordatorio:</span> Los residuos de poda y escombros se retiran los días lunes. Separar los residuos reciclables ayuda al medio ambiente.</p>
                     </div>
                 </div>
+
+                <!-- Reportes Screen -->
+                <div id="demo-reportes" class="demo-screen">
+                    <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Reportar Incidencia</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 items-start">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Informar un nuevo incidente</h3>
+                            <form id="report-form" class="space-y-4">
+                                <div>
+                                    <label for="category" class="block text-sm font-medium text-gray-700">Categoría</label>
+                                    <select id="category" name="category" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#6b9468] focus:border-[#6b9468] sm:text-sm rounded-md">
+                                        <option>Alumbrado Público</option>
+                                        <option>Baches en la calzada</option>
+                                        <option>Recolección de residuos</option>
+                                        <option>Fuga de agua</option>
+                                        <option>Otro</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="location" class="block text-sm font-medium text-gray-700">Ubicación</label>
+                                    <input type="text" id="location" name="location" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-[#6b9468] focus:border-[#6b9468] sm:text-sm rounded-md" placeholder="Ej: Calle San Martín 123">
+                                </div>
+                                <div>
+                                    <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
+                                    <textarea id="description" name="description" rows="3" class="mt-1 shadow-sm focus:ring-[#6b9468] focus:border-[#6b9468] block w-full sm:text-sm border border-gray-300 rounded-md p-2" placeholder="Describa el problema..."></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Adjuntar foto (opcional)</label>
+                                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                        <div class="space-y-1 text-center">
+                                            <div class="flex text-sm text-gray-600">
+                                                <label class="relative cursor-pointer bg-white rounded-md font-medium text-[#6b9468] hover:text-[#4b6948] focus-within:outline-none">
+                                                    <span>Seleccionar archivo</span>
+                                                    <input type="file" class="sr-only">
+                                                </label>
+                                            </div>
+                                            <p class="text-xs text-gray-500">PNG, JPG hasta 5MB</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="submitReport()" class="w-full bg-[#6b9468] hover:bg-[#4b6948] text-white font-bold py-2 px-4 rounded-md transition duration-300">Enviar Reporte</button>
+                            </form>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Reportes Recientes en tu Zona</h3>
+                            <div class="chart-container w-full h-64 mx-auto mb-6">
+                                <canvas id="reportsChart"></canvas>
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                <h4 class="font-medium text-[#3C5A4B] mb-2">Estado de tus reportes</h4>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span>Bache en Av. San Martín - Reportado hace 2 días</span>
+                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">En revisión</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span>Luz quemada en Plaza Central - Reportado hace 5 días</span>
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Resuelto</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trámites Screen -->
+                <div id="demo-tramites" class="demo-screen">
+                    <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Trámites Online</h2>
+                    
+                    <div class="mb-6">
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+                            <p class="text-blue-700"><span class="font-bold">Importante:</span> Realizá tus trámites municipales de forma digital las 24 horas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Trámites Disponibles</h3>
+                            <div class="space-y-3">
+                                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                                    <h4 class="font-bold text-[#3C5A4B]">📋 Licencia de Conducir</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Renovación y obtención de licencia</p>
+                                </div>
+                                
+                                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                                    <h4 class="font-bold text-[#3C5A4B]">🏠 Habilitación Comercial</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Trámites para comercios e industrias</p>
+                                </div>
+                                
+                                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                                    <h4 class="font-bold text-[#3C5A4B]">🚗 Transferencia Vehicular</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Cambio de titularidad de vehículos</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Trámites Rápidos</h3>
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-5">
+                                <h4 class="font-bold text-[#3C5A4B] mb-3">¿Necesitás ayuda?</h4>
+                                <p class="text-sm text-gray-600 mb-4">Contactanos para asistencia con tus trámites</p>
+                                <div class="space-y-2">
+                                    <div class="flex items-center text-sm">
+                                        <span class="font-medium w-24">Teléfono:</span>
+                                        <span>341-123-4567</span>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <span class="font-medium w-24">Email:</span>
+                                        <span>tramites@funes.gob.ar</span>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        <span class="font-medium w-24">Horario:</span>
+                                        <span>Lunes a Viernes 8:00-14:00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendario Eventos Screen -->
+                <div id="demo-eventos" class="demo-screen">
+                    <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Calendario de Eventos</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Próximos Eventos</h3>
+                            <div class="space-y-4">
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-bold">Feria Artesanal</h4>
+                                            <p class="text-sm text-gray-600">Plaza Central</p>
+                                        </div>
+                                        <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">15 Oct</span>
+                                    </div>
+                                    <div class="mt-2 flex items-center text-sm">
+                                        <span class="text-gray-500">10:00 - 18:00 hs</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-bold">Concierto Municipal</h4>
+                                            <p class="text-sm text-gray-600">Anfiteatro</p>
+                                        </div>
+                                        <span class="bg-[#4b6948] text-white px-2 py-1 rounded text-sm">22 Oct</span>
+                                    </div>
+                                    <div class="mt-2 flex items-center text-sm">
+                                        <span class="text-gray-500">20:00 hs</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Calendario Mensual</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg text-center">
+                                <div class="text-4xl mb-2">📅</div>
+                                <p class="text-gray-600">Calendario interactivo de eventos</p>
+                                <p class="text-sm text-gray-500 mt-2">Próximamente: vista completa del calendario</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solidaridad Screen -->
+                <div id="demo-solidaridad" class="demo-screen">
+                    <h2 class="text-2xl font-bold text-[#4b6948] mb-4">Solidaridad y Comunidad</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Mascotas Perdidas</h3>
+                            <div class="space-y-4">
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="font-bold text-[#3C5A4B]">🐕 Reportar Mascota Perdida</h4>
+                                    <p class="text-sm text-gray-600 mt-2">Si perdiste tu mascota, reportala aquí para que la comunidad pueda ayudarte.</p>
+                                    <button class="mt-3 bg-[#6b9468] hover:bg-[#4b6948] text-white text-sm px-3 py-1 rounded transition">Reportar</button>
+                                </div>
+                                
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="font-bold text-[#3C5A4B]">🐈 Mascotas Encontradas</h4>
+                                    <p class="text-sm text-gray-600 mt-2">Revisa las mascotas que han sido encontradas en la zona.</p>
+                                    <button class="mt-3 bg-[#6b9468] hover:bg-[#4b6948] text-white text-sm px-3 py-1 rounded transition">Ver lista</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3">Donación de Sangre</h3>
+                            <div class="space-y-4">
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="font-bold text-[#3C5A4B]">💉 Buscar Donantes</h4>
+                                    <p class="text-sm text-gray-600 mt-2">Solicitud urgente de donantes de sangre por grupo sanguíneo.</p>
+                                    <button class="mt-3 bg-[#6b9468] hover:bg-[#4b6948] text-white text-sm px-3 py-1 rounded transition">Buscar</button>
+                                </div>
+                                
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="font-bold text-[#3C5A4B]">🩸 Registrarse como Donante</h4>
+                                    <p class="text-sm text-gray-600 mt-2">Únete al registro de donantes voluntarios de sangre.</p>
+                                    <button class="mt-3 bg-[#6b9468] hover:bg-[#4b6948] text-white text-sm px-3 py-1 rounded transition">Registrarse</button>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                                <p class="text-blue-700 text-sm">📍 Centro de Donación: Hospital Municipal - Lunes a Viernes 8:00-12:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -639,36 +930,58 @@
             const loadingScreen = document.getElementById('loadingScreen');
             const mainContent = document.getElementById('mainContent');
             
-            // Show loading for 2 seconds
             setTimeout(() => {
                 loadingScreen.style.opacity = '0';
                 loadingScreen.style.visibility = 'hidden';
-                
                 mainContent.classList.add('loaded');
-                
-                // Initialize app after loading
                 initializeApp();
             }, 2000);
         });
         
         // Initialize app functions
         function initializeApp() {
+            updateTime();
+            setInterval(updateTime, 1000);
+            updateWeather();
             renderReportsChart();
             simulateGeolocation();
             setCurrentDate();
         }
 
+        // Actualizar hora en tiempo real (formato 24hs)
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-AR', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('es-ES', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            document.getElementById('current-time').textContent = timeString;
+            document.getElementById('current-date-full').textContent = dateString;
+        }
+
+        // Simular datos del clima
+        function updateWeather() {
+            const temperatures = [22, 23, 24, 25, 26];
+            const randomTemp = temperatures[Math.floor(Math.random() * temperatures.length)];
+            document.getElementById('current-temp').textContent = `${randomTemp}°C`;
+        }
+
         // Demo navigation
         function showDemoScreen(screenId) {
-            // Hide all screens
             document.querySelectorAll('.demo-screen').forEach(screen => {
                 screen.classList.remove('active');
             });
-            
-            // Show selected screen
             document.getElementById(`demo-${screenId}`).classList.add('active');
             
-            // Initialize specific screens
             if (screenId === 'reportes') {
                 renderReportsChart();
             } else if (screenId === 'transporte') {
@@ -695,13 +1008,7 @@
                 datasets: [{
                     label: 'Tipos de Reporte',
                     data: [15, 22, 18, 10, 5],
-                    backgroundColor: [
-                        '#FBBF24', // Amarillo
-                        '#60A5FA', // Azul
-                        '#4b6948', // Verde oscuro
-                        '#34D399', // Verde menta
-                        '#9CA3AF'  // Gris
-                    ],
+                    backgroundColor: ['#FBBF24', '#60A5FA', '#4b6948', '#34D399', '#9CA3AF'],
                     borderColor: '#FFFFFF',
                     borderWidth: 2
                 }]
@@ -716,11 +1023,7 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: {
-                                font: {
-                                    family: "'Poppins', sans-serif"
-                                }
-                            }
+                            labels: { font: { family: "'Poppins', sans-serif" } }
                         }
                     }
                 },
@@ -736,7 +1039,6 @@
         
         // Submit report
         function submitReport() {
-            const category = document.getElementById('category').value;
             const location = document.getElementById('location').value;
             const description = document.getElementById('description').value;
             
@@ -746,8 +1048,6 @@
             }
             
             showNotification('¡Reporte enviado con éxito! Nº de seguimiento: #' + Math.floor(1000 + Math.random() * 9000));
-            
-            // Clear form
             document.getElementById('report-form').reset();
         }
         
@@ -763,7 +1063,15 @@
                 notification.classList.remove('show');
             }, 3000);
         }
-    </script>
 
+        // Urbanito functionality
+        function showUrbanitoRoute() {
+            showNotification('🗺️ Mostrando recorrido del Urbanito de Funes');
+        }
+
+        function showUrbanitoSchedule() {
+            showNotification('🕒 Mostrando horarios del Urbanito de Funes');
+        }
+    </script>
 </body>
 </html>
